@@ -42,6 +42,80 @@ img {
   margin: 0 auto;
 }
 
+.top-nav {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(231, 229, 228, 0.9);
+}
+
+.top-nav-inner {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.8rem 0;
+}
+
+.nav-group {
+  position: relative;
+}
+
+.nav-button,
+.nav-link {
+  appearance: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.92);
+  color: var(--accent);
+  border-radius: 999px;
+  text-decoration: none;
+  font: inherit;
+  padding: 0.65rem 1rem;
+  cursor: pointer;
+  transition: background 0.18s ease, border-color 0.18s ease, transform 0.18s ease;
+}
+
+.nav-button:hover,
+.nav-link:hover,
+.nav-dropdown:hover .nav-button {
+  background: var(--accent-soft);
+  transform: translateY(-1px);
+}
+
+.nav-menu {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 0.45rem);
+  min-width: 220px;
+  display: none;
+  background: #ffffff;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+  padding: 0.45rem;
+}
+
+.nav-menu a {
+  display: block;
+  padding: 0.65rem 0.8rem;
+  border-radius: 10px;
+  text-decoration: none;
+  color: var(--text);
+}
+
+.nav-menu a:hover {
+  background: var(--accent-soft);
+}
+
+.nav-dropdown:hover .nav-menu {
+  display: block;
+}
+
 .hero {
   padding: 4.8rem 0 3rem;
   border-bottom: 1px solid var(--line);
@@ -126,7 +200,8 @@ figcaption,
 }
 
 .authors,
-.affiliations {
+.affiliations,
+.homepage-link {
   margin-bottom: 0.35rem;
 }
 
@@ -141,6 +216,16 @@ figcaption,
   justify-content: center;
   flex-wrap: wrap;
   gap: 0.35rem 1.2rem;
+}
+
+.homepage-link a {
+  color: #1f3b68;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(31, 59, 104, 0.22);
+}
+
+.homepage-link a:hover {
+  border-bottom-color: rgba(31, 59, 104, 0.5);
 }
 
 .hero-actions {
@@ -504,6 +589,17 @@ code {
   .mini-cards,
   .intro-layout {
     grid-template-columns: 1fr;
+  }
+
+  .top-nav-inner {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .nav-menu {
+    right: auto;
+    left: 50%;
+    transform: translateX(-50%);
   }
 
   .intro-visual {
