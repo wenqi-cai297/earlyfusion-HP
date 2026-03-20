@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>EVLF: Early Vision-Language Fusion for Generative Dataset Distillation</title>
+    <meta
+      name="description"
+      content="Academic project page for EVLF: Early Vision-Language Fusion for Generative Dataset Distillation."
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="hero">
+      <div class="container hero-inner">
+        <p class="eyebrow">CVPR 2026</p>
+        <h1>EVLF: Early Vision-Language Fusion for Generative Dataset Distillation</h1>
+        <p class="authors">
+          Wenqi Cai, Yawen Zou, Guang Li, Chunzhi Gu, Chao Zhang
+        </p>
+        <p class="affiliations">
+          University of Toyama · Hokkaido University · University of Fukui
+        </p>
+        <div class="hero-actions">
+          <a class="button primary" href="https://arxiv.org/abs/2603.07476" target="_blank" rel="noreferrer">Paper</a>
+          <a class="button" href="https://arxiv.org/pdf/2603.07476" target="_blank" rel="noreferrer">PDF</a>
+          <a class="button" href="https://github.com/wenqi-cai297/earlyfusion-for-dd/" target="_blank" rel="noreferrer">GitHub</a>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section class="section intro-section">
+        <div class="container intro-layout">
+          <div class="intro-copy">
+            <div class="section-heading">
+              <p class="section-kicker">Introduction</p>
+              <h2>Why early vision-language fusion?</h2>
+            </div>
+            <p>
+              Dataset distillation (DD) seeks to synthesize compact training sets that retain strong
+              downstream utility with far fewer samples. In recent diffusion-based DD methods, textual
+              semantics are often injected late in the generation process, which can cause prompt
+              guidance to dominate visual evidence and weaken the contribution of visual latents.
+            </p>
+            <p>
+              In EVLF, we retain the conventional late-fusion pathway and additionally introduce an
+              early vision-language fusion module at the encoder-to-backbone transition. This design
+              strengthens the interaction between visual structure and semantic guidance throughout the
+              denoising process, rather than relying only on late-stage conditioning.
+            </p>
+            <p>
+              EVLF is a lightweight, plug-and-play component for diffusion-based DD pipelines with an
+              encoder. By complementing late fusion with early cross-modal interaction, we improve the
+              balance between semantic alignment and visual fidelity, leading to more coherent synthetic
+              samples and stronger downstream classification performance.
+            </p>
+            <div class="info-panel intro-highlights">
+              <h3>Highlights</h3>
+              <ul class="clean-list">
+                <li>We retain the conventional late-fusion design and add an early vision-language fusion module.</li>
+                <li>Our early fusion interface strengthens the interaction between visual evidence and language guidance.</li>
+                <li>EVLF is lightweight and can be inserted at the encoder–backbone interface.</li>
+                <li>Across settings, EVLF improves sample coherence and downstream utility.</li>
+              </ul>
+            </div>
+          </div>
+          <div class="intro-visual">
+            <figure class="feature-frame intro-figure">
+              <img src="assets/images/illustration.png" alt="EVLF overview illustration" />
+              <figcaption>
+                Overview of EVLF.
+                <a href="assets/pdfs/illustration.pdf" target="_blank" rel="noreferrer">Open PDF</a>
+              </figcaption>
+            </figure>
+            <div class="mini-cards intro-mini-cards">
+              <article class="mini-card">
+                <h3>Input</h3>
+                <p>Visual latents together with class-level text guidance.</p>
+              </article>
+              <article class="mini-card">
+                <h3>Fusion</h3>
+                <p>We add early cross-modal fusion while preserving the standard late-fusion pathway.</p>
+              </article>
+              <article class="mini-card">
+                <h3>Outcome</h3>
+                <p>More coherent synthetic samples and better downstream performance.</p>
+              </article>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section alt">
+        <div class="container">
+          <div class="section-heading narrow">
+            <p class="section-kicker">Method</p>
+            <h2>Framework overview</h2>
+            <p>
+              EVLF introduces two key modifications to the diffusion-based dataset distillation pipeline:
+              we revise the fusion interface by performing vision-language interaction at the encoder-to-backbone
+              transition, and we optionally fine-tune the denoiser when adaptation to the fused latent space is needed.
+            </p>
+          </div>
+          <figure class="method-figure">
+            <img src="assets/images/pipline.png" alt="EVLF pipeline figure" />
+          </figure>
+          <p class="figure-note">
+            <strong>Framework overview of EVLF.</strong> We modify the original diffusion-based dataset distillation pipeline in two ways. First, we introduce an additional early vision-language fusion module at the encoder-to-backbone interface, allowing visual latents and text embeddings to interact before denoising while preserving the standard late-fusion pathway. Second, for pipelines whose pretrained denoiser is not adapted to the target dataset or the fused latent distribution, we optionally fine-tune the denoiser to better match the fused representations.
+            <a href="assets/pdfs/pipline.pdf" target="_blank" rel="noreferrer">Open PDF</a>
+          </p>
+        </div>
+      </section>
+
+      <section id="results" class="section">
+        <div class="container">
+          <div class="section-heading narrow">
+            <p class="section-kicker">Results</p>
+            <h2>Qualitative comparisons across datasets</h2>
+            <p>
+              Qualitative comparisons across ImageIDC, ImageNette, and ImageWoof show that EVLF produces
+              synthetic samples with stronger label fidelity and more coherent visual structure than
+              conventional late-fusion baselines. In particular, EVLF better preserves object shape,
+              texture, and class-consistent details while reducing the over-corrected artifacts that
+              often appear when semantic guidance dominates the denoising process.
+            </p>
+          </div>
+          <div class="result-grid">
+            <article class="pdf-card">
+              <div class="card-header">
+                <div>
+                  <p class="card-label">Dataset</p>
+                  <h3>ImageIDC</h3>
+                </div>
+                <a href="assets/pdfs/idc.pdf" target="_blank" rel="noreferrer">PDF</a>
+              </div>
+              <img src="assets/images/idc.png" alt="ImageIDC qualitative comparison" />
+              <p>
+                Qualitative comparison on ImageIDC.
+              </p>
+            </article>
+            <article class="pdf-card">
+              <div class="card-header">
+                <div>
+                  <p class="card-label">Dataset</p>
+                  <h3>ImageNette</h3>
+                </div>
+                <a href="assets/pdfs/nette.pdf" target="_blank" rel="noreferrer">PDF</a>
+              </div>
+              <img src="assets/images/nette.png" alt="ImageNette qualitative comparison" />
+              <p>
+                Qualitative comparison on ImageNette.
+              </p>
+            </article>
+            <article class="pdf-card">
+              <div class="card-header">
+                <div>
+                  <p class="card-label">Dataset</p>
+                  <h3>ImageWoof</h3>
+                </div>
+                <a href="assets/pdfs/woof.pdf" target="_blank" rel="noreferrer">PDF</a>
+              </div>
+              <img src="assets/images/woof.png" alt="ImageWoof qualitative comparison" />
+              <p>
+                Qualitative comparison on ImageWoof.
+              </p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section alt">
+        <div class="container">
+          <div class="section-heading narrow">
+            <p class="section-kicker">Quantitative Results</p>
+            <h2>Performance under different IPC settings</h2>
+            <p>
+              We report the main quantitative comparisons from the paper for ImageWoof, followed by the
+              ImageNette and ImageIDC results. Across datasets and IPC settings, EVLF consistently
+              improves over diffusion-based baselines, with especially clear gains in low-IPC regimes
+              where preserving both semantic fidelity and visual structure is most challenging.
+            </p>
+          </div>
+          <div class="table-stack">
+            <div class="table-card">
+              <h3 class="table-title">ImageWoof</h3>
+              <div class="table-wrap">
+                <table class="results-table results-table-wide imagewoof-table">
+                  <colgroup>
+                    <col class="col-ipc" />
+                    <col class="col-model" />
+                    <col span="7" />
+                  </colgroup>
+                  <thead>
+                    <tr>
+                      <th>IPC</th>
+                      <th>Test Model</th>
+                      <th>Random</th>
+                      <th>DiT</th>
+                      <th>Minimax</th>
+                      <th>D⁴M</th>
+                      <th>D⁴M+EVLF</th>
+                      <th>MGD³</th>
+                      <th>MGD³+EVLF</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td rowspan="3">10</td>
+                      <td>ConvNet-6</td>
+                      <td>24.3 ± 1.1</td><td>34.2 ± 1.1</td><td>33.3 ± 1.7</td><td>29.4 ± 0.9</td><td>34.3 ± 2.4</td><td>33.5 ± 1.9</td><td><strong>34.9 ± 1.0</strong></td>
+                    </tr>
+                    <tr>
+                      <td>ResNetAP-10</td>
+                      <td>29.4 ± 0.8</td><td>34.7 ± 0.5</td><td>36.2 ± 3.2</td><td>33.2 ± 2.1</td><td>37.3 ± 0.7</td><td>36.6 ± 0.9</td><td><strong>39.3 ± 0.3</strong></td>
+                    </tr>
+                    <tr>
+                      <td>ResNet-18</td>
+                      <td>27.7 ± 0.9</td><td>34.7 ± 0.4</td><td>35.7 ± 1.6</td><td>32.3 ± 1.2</td><td>35.9 ± 2.1</td><td>35.1 ± 1.8</td><td><strong>38.5 ± 0.3</strong></td>
+                    </tr>
+                    <tr>
+                      <td rowspan="3">20</td>
+                      <td>ConvNet-6</td>
+                      <td>29.1 ± 0.7</td><td>36.1 ± 0.8</td><td>37.3 ± 0.1</td><td>34.0 ± 2.3</td><td>40.1 ± 2.6</td><td>36.2 ± 1.6</td><td><strong>40.2 ± 0.5</strong></td>
+                    </tr>
+                    <tr>
+                      <td>ResNetAP-10</td>
+                      <td>32.7 ± 0.4</td><td>41.1 ± 0.8</td><td>43.3 ± 2.7</td><td>40.1 ± 1.6</td><td>42.8 ± 0.2</td><td>44.5 ± 2.8</td><td><strong>45.1 ± 0.9</strong></td>
+                    </tr>
+                    <tr>
+                      <td>ResNet-18</td>
+                      <td>29.7 ± 0.5</td><td>40.5 ± 0.5</td><td>41.8 ± 1.9</td><td>38.4 ± 1.1</td><td>40.7 ± 1.3</td><td>40.3 ± 2.5</td><td><strong>42.1 ± 0.3</strong></td>
+                    </tr>
+                    <tr>
+                      <td rowspan="3">50</td>
+                      <td>ConvNet-6</td>
+                      <td>41.3 ± 0.6</td><td>46.5 ± 0.8</td><td>50.9 ± 0.8</td><td>47.4 ± 0.9</td><td>52.5 ± 0.9</td><td>51.9 ± 0.4</td><td><strong>53.5 ± 0.4</strong></td>
+                    </tr>
+                    <tr>
+                      <td>ResNetAP-10</td>
+                      <td>47.2 ± 1.3</td><td>49.3 ± 0.2</td><td>53.9 ± 0.7</td><td>51.7 ± 3.2</td><td>55.8 ± 0.2</td><td>55.6 ± 1.0</td><td><strong>59.0 ± 1.1</strong></td>
+                    </tr>
+                    <tr>
+                      <td>ResNet-18</td>
+                      <td>47.9 ± 1.8</td><td>50.1 ± 0.5</td><td>53.7 ± 0.6</td><td>53.7 ± 2.2</td><td>58.1 ± 0.9</td><td>56.3 ± 0.5</td><td><strong>58.7 ± 1.5</strong></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <p class="table-note">
+                Classification accuracy (%) on ImageWoof across IPC settings and test architectures.
+                Values are reported as mean ± standard deviation. The best result in each row is highlighted.
+              </p>
+            </div>
+
+            <div class="table-card">
+              <h3 class="table-title">ImageNette and ImageIDC</h3>
+              <div class="table-wrap">
+                <table class="results-table nette-idc-table">
+                  <colgroup>
+                    <col class="col-dataset" />
+                    <col class="col-ipc" />
+                    <col span="8" />
+                  </colgroup>
+                  <thead>
+                    <tr>
+                      <th>Dataset</th>
+                      <th class="ipc-col">IPC</th>
+                      <th>Random</th>
+                      <th>DiT</th>
+                      <th>DM</th>
+                      <th>Minimax</th>
+                      <th>D⁴M</th>
+                      <th>D⁴M+EVLF</th>
+                      <th>MGD³</th>
+                      <th>MGD³+EVLF</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td rowspan="3"><strong>ImageNette</strong></td>
+                      <td class="ipc-col">10</td>
+                      <td>54.2 ± 1.6</td>
+                      <td>59.1 ± 0.7</td>
+                      <td>60.8 ± 0.6</td>
+                      <td>57.7 ± 1.2</td>
+                      <td>60.9 ± 1.7</td>
+                      <td>65.8 ± 1.2</td>
+                      <td>64.3 ± 1.0</td>
+                      <td><strong>66.0 ± 1.6</strong></td>
+                    </tr>
+                    <tr>
+                      <td class="ipc-col">20</td>
+                      <td>63.5 ± 0.5</td>
+                      <td>64.8 ± 1.2</td>
+                      <td>66.5 ± 1.1</td>
+                      <td>64.7 ± 0.8</td>
+                      <td>66.3 ± 1.3</td>
+                      <td>71.7 ± 0.5</td>
+                      <td>69.2 ± 1.9</td>
+                      <td><strong>72.5 ± 0.8</strong></td>
+                    </tr>
+                    <tr>
+                      <td class="ipc-col">50</td>
+                      <td>76.1 ± 1.1</td>
+                      <td>73.3 ± 0.9</td>
+                      <td>76.2 ± 0.4</td>
+                      <td>73.9 ± 0.3</td>
+                      <td>77.7 ± 1.1</td>
+                      <td><strong>79.7 ± 0.5</strong></td>
+                      <td>79.2 ± 1.9</td>
+                      <td>79.5 ± 0.4</td>
+                    </tr>
+                    <tr>
+                      <td rowspan="3"><strong>ImageIDC</strong></td>
+                      <td class="ipc-col">10</td>
+                      <td>48.1 ± 0.8</td>
+                      <td>54.1 ± 0.4</td>
+                      <td>52.8 ± 0.5</td>
+                      <td>51.9 ± 1.4</td>
+                      <td>47.7 ± 0.5</td>
+                      <td><strong>57.3 ± 1.5</strong></td>
+                      <td>55.0 ± 2.3</td>
+                      <td>56.3 ± 1.5</td>
+                    </tr>
+                    <tr>
+                      <td class="ipc-col">20</td>
+                      <td>52.5 ± 0.9</td>
+                      <td>58.9 ± 0.2</td>
+                      <td>58.5 ± 0.4</td>
+                      <td>59.1 ± 3.7</td>
+                      <td>56.3 ± 0.7</td>
+                      <td>62.0 ± 0.7</td>
+                      <td>61.7 ± 1.0</td>
+                      <td><strong>64.1 ± 0.3</strong></td>
+                    </tr>
+                    <tr>
+                      <td class="ipc-col">50</td>
+                      <td>68.1 ± 0.7</td>
+                      <td>64.3 ± 0.6</td>
+                      <td>69.1 ± 0.8</td>
+                      <td>69.4 ± 1.4</td>
+                      <td>67.8 ± 1.0</td>
+                      <td>72.1 ± 0.3</td>
+                      <td>71.0 ± 0.9</td>
+                      <td><strong>72.7 ± 1.1</strong></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <p class="table-note">
+                Classification accuracy (%) on ImageNette and ImageIDC with ResNetAP-10. Values are
+                reported as mean ± standard deviation. The best result in each row is highlighted.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <div class="section-heading narrow">
+            <p class="section-kicker">Analysis</p>
+            <h2>Representation and attribution analysis</h2>
+            <p>
+              We report representation, attribution, and hyperparameter analyses using t-SNE, Grad-CAM,
+              and the line-chart summary from the paper.
+            </p>
+          </div>
+          <div class="analysis-grid">
+            <article class="analysis-card wide">
+              <div class="card-header">
+                <div>
+                  <p class="card-label">Embedding space</p>
+                  <h3>t-SNE comparison</h3>
+                </div>
+                <a href="assets/pdfs/tsne.pdf" target="_blank" rel="noreferrer">PDF</a>
+              </div>
+              <img src="assets/images/tsne.png" alt="t-SNE comparison figure" />
+              <p>
+                t-SNE comparison on ImageIDC. Both D<sup>4</sup>M and MGD<sup>3</sup> tend to produce
+                tightly clustered synthetic samples, indicating limited diversity and restricted coverage
+                of the original feature space. After incorporating EVLF, the generated samples become more
+                dispersed and better separated, suggesting improved distributional coverage and richer
+                class-wise variation.
+              </p>
+            </article>
+            <article class="analysis-card wide">
+              <div class="card-header">
+                <div>
+                  <p class="card-label">Hyperparameter</p>
+                  <h3>Hyperparameter analysis</h3>
+                </div>
+                <a href="assets/pdfs/lineChart.pdf" target="_blank" rel="noreferrer">PDF</a>
+              </div>
+              <img src="assets/images/lineChart.png" alt="Hyperparameter analysis figure" />
+              <p>
+                Hyperparameter analysis of λ<sub>1</sub> on ImageIDC. Enabling text injection
+                (λ<sub>1</sub> &gt; 0) noticeably improves both validation accuracy and distributional
+                coverage, while λ<sub>1</sub> = 0 leads to over-corrected generations dominated by
+                late-stage prompt conditioning. Once EVLF is introduced, both metrics become more stable,
+                indicating that the method is robust to moderate changes in the text-alignment weight.
+              </p>
+            </article>
+            <article class="analysis-card analysis-card-large">
+              <div class="card-header">
+                <div>
+                  <p class="card-label">Attribution</p>
+                  <h3>Grad-CAM comparison</h3>
+                </div>
+                <a href="assets/pdfs/gradcam.pdf" target="_blank" rel="noreferrer">PDF</a>
+              </div>
+              <img src="assets/images/gradcam.png" alt="Grad-CAM comparison figure" />
+              <p>
+                Grad-CAM visualizations for the Shih-Tzu class from the ImageWoof validation set.
+                Compared with models trained on datasets distilled by the original baselines, models
+                trained on EVLF-enhanced data exhibit more discriminative and semantically relevant
+                attention. In particular, EVLF suppresses redundant background activation for D<sup>4</sup>M
+                and encourages MGD<sup>3</sup> to focus on a broader and more complete region of the target
+                object.
+              </p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section alt">
+        <div class="container two-column">
+          <div>
+            <div class="section-heading">
+              <p class="section-kicker">Citation</p>
+              <h2>BibTeX</h2>
+            </div>
+            <pre id="citation">@article{cai2026evlf,
+  title={EVLF: Early Vision-Language Fusion for Generative Dataset Distillation},
+  author={Cai, Wenqi and Zou, Yawen and Li, Guang and Gu, Chunzhi and Zhang, Chao},
+  journal={arXiv preprint arXiv:2603.07476},
+  year={2026}
+}</pre>
+            <button id="copy-citation" type="button">Copy BibTeX</button>
+          </div>
+          <div>
+            <div class="info-panel">
+              <h3>Project links</h3>
+              <ul class="clean-list">
+                <li><a href="https://arxiv.org/abs/2603.07476" target="_blank" rel="noreferrer">arXiv abstract</a></li>
+                <li><a href="https://arxiv.org/pdf/2603.07476" target="_blank" rel="noreferrer">Paper PDF</a></li>
+                <li><a href="https://github.com/wenqi-cai297/earlyfusion-for-dd/" target="_blank" rel="noreferrer">Official repository</a></li>
+                <li><a href="assets/pdfs/illustration.pdf" target="_blank" rel="noreferrer">Local figure assets</a></li>
+              </ul>
+              <p class="note">
+                Project materials and figure assets are collected here for convenient reference.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <p>EVLF Project Page</p>
+        <p>CVPR 2026</p>
+      </div>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>
